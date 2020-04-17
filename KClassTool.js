@@ -36,7 +36,7 @@ var kLib = kLib ||{} ;
     {
         victim.className = victim.className .replace(className, "");
     }
-
+    kLib.removeClassToElement = removeClassToElement;
 
 
     kLib.validateOnlyThisElementHasClassName = function(victimElement,className)

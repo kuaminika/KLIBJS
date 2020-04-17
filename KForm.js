@@ -55,27 +55,66 @@
 		var submitBtnId = kFormOptions.submitBtnId;
 		var courrierTool = kFormOptions.courrierTool;
 		var me = this;
-		
-		me.submitProcedure = blankProcedure;
+		var formHtmlCode;
+		var submitProcedure = blankProcedure;
 
+		me.id = formId;
 		me.submitBtn = kLib.getById(submitBtnId);
 
-		me.submitBtn.onclick = 	me.submitProcedure;
+		var validationProcedure = function(e){blankProcedure.bind(me)(e); return true; }
+		me.setValidationPocedure = function(newProcedure){validationProcedure = newProcedure.bind(me); }
+	
+		me.showLoading=	function (loadingCode)
+		{
+			loadingCode = loadingCode || "loading...";
+			var k_cForm = me.findFormEl(); 
+			formHtmlCode = k_cForm.innerHTML;
+			k_cForm.innerHTML = loadingCode;
+		}
+		me.takeOffLoading = function()
+		{
+			var k_cForm = me.findFormEl(); 
+			k_cForm.innerHTML = formHtmlCode
+		}
+		me.showSubmitProcedure = function () { console.log(submitProcedure);}
+		me.submitBtn.onclick = (function(e)
+		{	
+			if(!formIsValid())
+			{
+				console.log("form validation failed. will not do submit procedure");
+				return;
+			}
+			  submitProcedure.bind(me)(e);
 
-
+		}).bind(me)
+		me.reset = function()
+		{
+			me.submitBtn = kLib.getById(submitBtnId);
+			me.setSubmitProcedure(submitProcedure);
+		}
 		me.setSubmitProcedure=function(newProcedure)
 		{
-			me.submitProcedure = newProcedure.bind(me);
-			me.submitBtn.onclick = 	me.submitProcedure;
+
+			submitProcedure = newProcedure.bind(me);
+			me.submitBtn.onclick = 	(function(e)
+			{	
+				if(!formIsValid())
+				{
+					console.log("form validation failed. will not do submit procedure");
+					return;
+				}
+				  submitProcedure(e);
+	
+			}).bind(me);
 
 		}
-
-		me.findFormEl = function(form_id)
+		me.findFormEl =findFormEl;
+		 function findFormEl (form_id)
 		{
 			try
 			{
 				formId = form_id||formId;
-				if(!formIsValid()) return;
+				if(!formId) return;
 				
 				var formEL = document.getElementById(formId);
 				
@@ -106,7 +145,14 @@
 			
 			return result;
 		}
-		var unknwownUrl = "unknown url"
+		
+		function encodeToSend(data)  {
+			return Object.keys(data)
+				.map(function(key) { return encodeURIComponent(key) + '=' + encodeURIComponent(data[key])})
+				.join('&');
+		}
+		
+		var unknwownUrl = "unknown url";
 		me.sendInfo = function(receivingURL,callback)
 		{
 			var receivingURL = receivingURL ||unknwownUrl ;
@@ -120,7 +166,7 @@
 			
 			sendInfo(receivingURL,content,callback);
 		}
-		
+	
 		me.setFormData = function (dataName,newValue, /*setExtensionFn,*/k_cForm)
 		{
 			k_cForm = k_cForm||me.findFormEl();
@@ -156,11 +202,6 @@
 			Kform.RunExtensionSetters(k_cForm,dataName,newValue);
 		}
 		
-		function encodeToSend(data)  {
-			return Object.keys(data)
-				.map(function(key) { return encodeURIComponent(key) + '=' + encodeURIComponent(data[key])})
-				.join('&');
-		}
 
 		function sendInfo(receivingURL,content,callback)
 		{
@@ -187,16 +228,27 @@
 		}
 
 		
+
+
 		
 		function formIsValid()
 		{
-			if(!formId) 
+			try
 			{
-				throw "mesye.. that form needs an ID";
-				return false;
+				if(!formId) 
+				{
+					throw "mesye.. that form needs an ID";
+				
+				}
+				
+				return validationProcedure();
 			}
-			
-			return true;		
+			catch(error)
+			{
+				console.error(error);
+				return false;
+
+			}		
 		}
 			
 		

@@ -21,16 +21,29 @@
     kLib.initCourrier = function(kCourierOptions)
     {
 
-        kLib.activeCourriers = kLib.activeCourriers || {};
+		try
+		{
+			kLib.log("init courrier request",kCourierOptions);
 
-       if(kCourierOptions.id && kLib.activeCourriers[kCourierOptions.id]) return kLib.activeCourriers[kCourierOptions.id];
+			if(!kCourierOptions) throw "options missing";
+			if(!kCourierOptions.id) throw "options.id missing";
+			if(!kCourierOptions.mainHostUrl) throw "options.mainHostUrl missing";
+
+			kLib.activeCourriers = kLib.activeCourriers || {};
+
+			if(kCourierOptions.id && kLib.activeCourriers[kCourierOptions.id]) return kLib.activeCourriers[kCourierOptions.id];
 
 
-        var result = new KuaminikaCourrier(kCourierOptions);
+			var result = new KuaminikaCourrier(kCourierOptions);
 
-        kLib.activeCourriers[kCourierOptions.id] = result;
+			kLib.activeCourriers[kCourierOptions.id] = result;
 
-        return result;
+			return result;
+		}
+		catch(error)
+		{
+			kLib.logError(error);
+		}
 	}
 	var apiMainOptions = generateOptions();
 	
