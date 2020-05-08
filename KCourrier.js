@@ -17,7 +17,8 @@
         var result = blankOptions;
         result.id = id;
         return result;
-    }
+	}
+	kLib.getBlankCourrierOptions = generateOptions;
     kLib.initCourrier = function(kCourierOptions)
     {
 

@@ -19,7 +19,7 @@
         console.log(data);
     }
 
-     /**  @function kLib._forEach
+     /**  @function kLib.forEach
       * @param collection - anything that has a .length
       * @param doIt - the function that will be done to elements of the given collection
       */
@@ -71,6 +71,19 @@
          return result;
      }
 
+     /** @function kLib.iterateObject
+      * @param obj - 
+      * @param fn
+      * this method is supposed to iterate the 'obj' and do fn(x,j) where x is a property of obj  and j i
+      */
+     function iterateObject(obj,fn)
+     {
+        for(var key in obj)
+        {
+            var j = obj[key];
+            fn(key,j);
+        }
+     }
 
 
     /** @function kLib.getfirstFromDataAttribute
@@ -130,6 +143,15 @@
 
     }
 
+
+    function capitalizeFirst(victimStr)
+    {
+        var index = 0;
+        var result =   victimStr.charAt(index).toUpperCase() + victimStr.slice(1);
+        return result;
+    }
+
+
      /**  @function kLib.getStringVersion */
     function getStringVersion(element)
     {
@@ -149,6 +171,7 @@
      * @namespace kLib
      */
     var kLib = w.kLib ;
+    kLib.iterateObject = iterateObject;
     kLib.getStringVersion = getStringVersion;
     kLib.mapTemplate = mapTemplate;
     kLib.getController = getController;
@@ -156,6 +179,7 @@
     kLib.getById = getById;
     kLib.log = console.log;
     kLib.logError = console.error;
+    kLib.capitalizeFirst = capitalizeFirst;
     kLib.isFunction = IsFunction;
     kLib.blnkProcedure = blnkProcedure;
     kLib.getfirstFromDataAttribute = getfirstFromDataAttribute;

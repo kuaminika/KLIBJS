@@ -6,6 +6,10 @@
 
 	var blankProcedure = kLib.blnkProcedure;
 
+	kLib.generateBlankFormOptions = function(){ return {id:"elementID"
+											,submitBtnId:"elementID"
+									  		,courrierTool:"obj"}; }
+
 
 	/**
 	 * blank form options looks like this
@@ -74,7 +78,8 @@
 		me.takeOffLoading = function()
 		{
 			var k_cForm = me.findFormEl(); 
-			k_cForm.innerHTML = formHtmlCode
+			k_cForm.innerHTML = formHtmlCode;
+			me.reset();
 		}
 		me.showSubmitProcedure = function () { console.log(submitProcedure);}
 		me.submitBtn.onclick = (function(e)
