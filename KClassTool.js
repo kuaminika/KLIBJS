@@ -34,7 +34,7 @@ var kLib = kLib ||{} ;
 
     }    
 
-    kLib[addClasstoElement.name] = addClasstoElement;
+    kLib.addClasstoElement= addClasstoElement;
 
 
 
