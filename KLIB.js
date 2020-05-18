@@ -58,7 +58,7 @@
 
             var el= collection[i];
 
-            doIt(el);
+            doIt(el,i);
 
         }
 
@@ -143,6 +143,11 @@
      }
 
 
+     function getData(element,attributeName)
+     {
+       var result  = element.getAttribute("data-"+attributeName);
+       return result;
+     }
 
      /** @function kLib.iterateObject
 
@@ -280,7 +285,8 @@
     function logIfYouCan(logMe)
     {
         if(!console) return;
-        console.log(logMe);
+        console.log(logMe);  
+       // console.log(new Error().stack);
     }
     function logErrorIfYouCan(error)
     {
@@ -290,7 +296,6 @@
 
 
      function getController(controllerName)
-
     {
 
         kLib.activeControllers = kLib.activeControllers || {};
@@ -375,6 +380,8 @@
      */
 
     var kLib = w.kLib ;
+
+    kLib.getData = getData;
 
     kLib.iterateObject = iterateObject;
 

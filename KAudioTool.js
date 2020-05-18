@@ -18,8 +18,10 @@
         public.playAtLaunch = rawOptions.playAtLaunch || [false];
         public.playToggleButtonTag = rawOptions.playToggleButtonTag || [];//document.createElement("div");
         public.nextButtonClassName = rawOptions.nextButtonClassName || "k-audio-next-button";
+        
         public.nextButtonTag = rawOptions.nextButtonTag || [];// document.createElement("div");
         public.wrapperTag = rawOptions.wrapperTag || [];// document.createElement("div");
+        public.audioItemClassName = rawOptions.audioItemClassName ||  "k-podcast-list-item";
     }
 
     function initKAudioTool(rawOptions)
@@ -57,6 +59,10 @@
         defaults.onProgression = function(proressionRatio) {kLib.log("playing audio the progression is:"+proressionRatio);}
         defaults.onPlayCallBack =  function()   {    kLib.log("play button clicked on ");  }
         defaults.onNextCallBack = function(){kLib.log("play button clicked on ");  }
+        defaults.onPlayIndexCallBack =  function(feedItem){
+            kLib.log("clicked on activating ");
+            kLib.log(feedItem);
+          }
 
         kLib.iterateObject(defaults,function(key,value){
             givens[key] = value;
@@ -69,6 +75,7 @@
         public.audioTag = audioTag;
         public.activate = activate;
         public.playToggleButtonElement = options.playToggleButtonTag;
+        public.audioItemClassName = options.audioItemClassName;
 
         public.wrapperTag = options.wrapperTag;
         public.nextButtonElement = options.nextButtonTag;
@@ -77,9 +84,9 @@
         public.innerPlayHTML  = "play";
         public.setOnProgression = function(fn) { givens.onProgression = fn.bind(this);}
         public.setOnPlayClicked = function(fn){ givens.onPlayCallBack = fn.bind(this); }
+        public.setPlayIndexCallBack =  function(fn){ givens.onPlayIndexCallBack = fn.bind(this); }
         public.setOnNextClicked = function(fn){ givens.onNextCallBack = fn.bind(this); }
         public.playAtLaunch  = options.playAtLaunch[0];
-        
 
         function validateFeedItem(feedItem)
         {
@@ -102,13 +109,24 @@
             givens.onNextCallBack(feedItem);
         }
 
-        function activate()
+
+        function playIndex(index)
+        {
+            var feedItem = public.feedItems[index];
+            feedItem = validateFeedItem(feedItem);
+            audioTag.setAttribute("src",feedItem.mp3Link);
+            audioTag.play();
+            public.playToggleButtonElement.innerHTML =  public.innerPauseHTML  ;
+            givens.onPlayIndexCallBack(feedItem);
+        }
+
+        function activate(indexToStartWith)
         {
 
 
             /**  public.feedItems = [];
         public.currentIndex = 0; */
-            var index = public.currentIndex;
+            var index = indexToStartWith || public.currentIndex;
             var feedItem = public.feedItems[index];
             feedItem = validateFeedItem(feedItem);
             audioTag.setAttribute("src",feedItem.mp3Link);
@@ -131,6 +149,18 @@
                 thingTodo();
                 givens.onPlayCallBack();
             }).bind(this);
+
+          
+            kLib.doThisToElementsWithClassName(public.audioItemClassName,function(element)
+            {
+                var index =  kLib.getData(element,"index");
+
+                element.onclick = function(){playIndex(index);};
+                //playIndex(index);
+                //kLib.log(index);
+            });
+
+
 
             audioTag.ontimeupdate = function()
             {

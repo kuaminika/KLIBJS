@@ -53,16 +53,12 @@ var kLib = kLib ||{} ;
     
 
     function removeClassToManyElements(victims,className)
-
     {     
 
-
-
         kLib.forEach(victims,function(element)
-
         {
 
-            console.log(element);
+            kLib.log(element);
 
             removeClassToElement(element,className) ;
 
@@ -73,16 +69,21 @@ var kLib = kLib ||{} ;
 
 
     function removeClassToElement(victim,className)
-
     {
-
         victim.className = victim.className .replace(className, "");
-
     }
 
     kLib.removeClassToElement = removeClassToElement;
 
 
+
+    kLib.doThisToElementsWithClassName = function(className,doThis)
+    {
+        var elementsWithClassName = document.getElementsByClassName(className);
+
+        kLib.forEach(elementsWithClassName,doThis);
+
+    }
 
 
 
