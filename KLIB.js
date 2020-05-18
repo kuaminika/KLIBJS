@@ -34,7 +34,7 @@
 
     {
 
-        console.log(data);
+        logIfYouCan(data);
 
     }
 
@@ -70,7 +70,7 @@
 
     {
 
-        console.log("this is a blank procedure. it should be replaced by an implementation");
+        logIfYouCan("this is a blank procedure. it should be replaced by an implementation");
 
     }
 
@@ -110,7 +110,7 @@
 
          {
 
-            console.error("did not find any thing for class:'{0}'",className);
+            logErrorIfYouCan("did not find any thing for class:'{0}'",className);
 
             return result;
 
@@ -132,11 +132,11 @@
 
         if(!result)         
 
-            console.error("did not find any thing for class:'"+className+"' and '"+dataAttribute+"'="+value);
+            logErrorIfYouCan("did not find any thing for class:'"+className+"' and '"+dataAttribute+"'="+value);
 
          
 
-        console.log("found");
+        logIfYouCan("found");
 
          return result;
 
@@ -170,9 +170,24 @@
 
      }
 
+     //cannot take credit for this one : 
+     //https://stackoverflow.com/questions/384286/how-do-you-check-if-a-javascript-object-is-a-dom-object
+     function isElement(obj) {
+        try {
 
-
-
+            if(!obj) return false;
+          //Using W3 DOM2 (works for FF, Opera and Chrome)
+          return obj instanceof HTMLElement;
+        }
+        catch(e){
+          //Browsers not supporting W3 DOM2 don't have HTMLElement and
+          //an exception is thrown and we end up here. Testing some
+          //properties that all elements have (works on IE7)
+          return (typeof obj==="object") &&
+            (obj.nodeType===1) && (typeof obj.style === "object") &&
+            (typeof obj.ownerDocument ==="object");
+        }
+      }
 
     /** @function kLib.getfirstFromDataAttribute
 
@@ -262,8 +277,16 @@
 
     }
 
-
-
+    function logIfYouCan(logMe)
+    {
+        if(!console) return;
+        console.log(logMe);
+    }
+    function logErrorIfYouCan(error)
+    {
+        if(!console) return;
+        console.error(error);
+    }
 
 
      function getController(controllerName)
@@ -276,7 +299,7 @@
 
 
 
-        var notFoundRslt = {run: function(){ console.log("not found"); },url:""};
+        var notFoundRslt = {run: function(){ logIfYouCan("not found"); },url:""};
 
 
 
@@ -366,9 +389,9 @@
 
     kLib.getById = getById;
 
-    kLib.log = console.log;
+    kLib.log = logIfYouCan;
 
-    kLib.logError = console.error;
+    kLib.logError = logErrorIfYouCan;
 
     kLib.capitalizeFirst = capitalizeFirst;
 
@@ -381,7 +404,7 @@
     kLib.filterWithDataAttribute = filterWithDataAttribute;
 
     kLib.getFromClassWithDataAttribute = getFromClassWithDataAttribute;
-
+    kLib.isElement = isElement;
     w.kLib = kLib;
 
     

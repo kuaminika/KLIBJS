@@ -7,7 +7,6 @@ var kLib = kLib ||{} ;
 {
 
     kLib.addClassById = function(id,className)
-
     {
 
         var victim = document.getElementById(id);
@@ -39,7 +38,6 @@ var kLib = kLib ||{} ;
 
 
     function addClassToManyElements(victims,className)
-
     {
 
         kLib.forEach(victims,function(element)  {
@@ -89,57 +87,54 @@ var kLib = kLib ||{} ;
 
 
     kLib.validateOnlyThisElementHasClassName = function(victimElement,className)
-
     {
-
         kLib.removeClassToAllWithClassName(className,className);
-
-
-
         addClasstoElement(victimElement,className);
-
     }
 
 
 
     //this will set the first Element with the given class name the given value
-
     kLib.setElementContentByClassName = function(className,value)
-
     {        
-
         var nameHolder =  document.getElementsByClassName(className)[0];
-
         nameHolder.innerHTML = value;
-
     }
 
 
 
     kLib.addClassToAllWithClassName = function(victimClassName,className)
-
     {
-
         var victims =    document.getElementsByClassName(victimClassName);
-
         addClassToManyElements(victims,className);
-
     }
 
 
 
     kLib.removeClassToAllWithClassName = function(victimClassName,className)
-
     {
-
         var victims =    document.getElementsByClassName(victimClassName);
-
         removeClassToManyElements(victims,className);
-
     }
 
 
+    kLib.getFirstFromClassName = function(className)
+    {
+        var results =  document.getElementsByClassName(className);
+        if(!results.length) throw "No elements were found with:"+className;
 
+        return results[0];
+    }
+
+    kLib.getFirstChildWithClassName = function(parent,className)
+    {
+        if(!parent || !kLib.isElement(parent)) throw "cannot find element: parent is invalid";
+     
+        var results = parent.getElementsByClassName(className);
+        if(!results.length) throw "No elements were found with:"+className;
+        return results[0];
+
+    }
 
 
 })(kLib)
