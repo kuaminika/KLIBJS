@@ -288,6 +288,7 @@
         console.log(logMe);  
        // console.log(new Error().stack);
     }
+    
     function logErrorIfYouCan(error)
     {
         if(!console) return;
@@ -410,6 +411,8 @@
 
     kLib.filterWithDataAttribute = filterWithDataAttribute;
 
+  //  kLib.logIfYouCan = logIfYouCan;
+  //  kLib.logErrorIfYouCan = logErrorIfYouCan;
     kLib.getFromClassWithDataAttribute = getFromClassWithDataAttribute;
     kLib.isElement = isElement;
     w.kLib = kLib;
